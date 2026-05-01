@@ -24,6 +24,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   refreshTokens RefreshToken[]
+  markers Marker[]
 
   locationHistory LocationHistory[]
 }
@@ -34,6 +35,8 @@ model LocationHistory {
   latitude  Float
   longitude Float
   createdAt DateTime @default(now())
+
+
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -51,4 +54,17 @@ model RefreshToken {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+}
+
+model Marker {
+  id        String   @id @default(uuid())
+  latitude  Float
+  longitude Float
+  createdAt DateTime @default(now())
+
+  userId    String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
 }

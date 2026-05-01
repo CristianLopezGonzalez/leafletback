@@ -25,7 +25,8 @@ export class AuthService {
                 id: true,
                 username: true,
                 email: true,
-                createdAt: true
+                createdAt: true,
+                markers: true
             }
         })
 
@@ -51,7 +52,8 @@ export class AuthService {
                 id: user.id,
                 username: user.username,
                 email: user.email,
-                createdAt: user.createdAt
+                createdAt: user.createdAt,
+                markers: user.markers
             },
             accessToken: token,
             refreshToken: createRefreshToken.token
@@ -67,7 +69,12 @@ export class AuthService {
                 username: true,
                 email: true,
                 password: true,
-                createdAt: true
+                createdAt: true,
+                markers: {
+                    orderBy: {
+                        createdAt: 'desc'
+                    }
+                }
             }
         });
 
@@ -102,7 +109,8 @@ export class AuthService {
                 id: user.id,
                 username: user.username,
                 email: user.email,
-                createdAt: user.createdAt
+                createdAt: user.createdAt,
+                markers: user.markers
             },
             accessToken: token,
             refreshToken: createRefreshToken.token

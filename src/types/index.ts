@@ -7,6 +7,21 @@ export interface User{
     longitude?:number,
     isOnline:boolean,
     createdAt:Date,
+    updatedAt?:Date,
+    markers?: Marker[]
+}
+
+export interface Marker {
+  id: string;
+  userId: string;
+  latitude: number;
+  longitude: number;
+  createdAt: Date;
+}
+
+export interface MarkerInput {
+  latitude: number;
+  longitude: number;
 }
 
 export interface LocationHistory {

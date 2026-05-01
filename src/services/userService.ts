@@ -14,6 +14,11 @@ export class UserService {
                     username: true,
                     latitude: true,
                     longitude: true,
+                        markers: {
+                            orderBy: {
+                                createdAt: 'desc'
+                            }
+                        },
                     updatedAt: true
                 }
             });
@@ -38,6 +43,11 @@ export class UserService {
                     isOnline: true,
                     latitude: true,
                     longitude: true,
+                    markers: {
+                        orderBy: {
+                            createdAt: 'desc'
+                        }
+                    },
                     createdAt: true,
                 }
             })
