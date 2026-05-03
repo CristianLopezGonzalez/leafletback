@@ -20,7 +20,8 @@ export class MarkerService {
                 data: {
                     userId,
                     latitude: markerData.latitude,
-                    longitude: markerData.longitude
+                    longitude: markerData.longitude,
+                    label: markerData.label
                 }
             });
         } catch (error) {
@@ -34,14 +35,16 @@ export class MarkerService {
             if (!markers.length) {
                 throw new Error('No se enviaron marcadores para crear');
             }
-
+            console.log(markers);
+            
             return await prisma.$transaction(
                 markers.map((marker) =>
                     prisma.marker.create({
                         data: {
                             userId,
                             latitude: marker.latitude,
-                            longitude: marker.longitude
+                            longitude: marker.longitude,
+                            label:marker.label
                         }
                     })
                 )
@@ -95,6 +98,32 @@ export class MarkerService {
         } catch (error) {
             console.error('Error al eliminar marcadores:', error);
             throw new Error('Error al eliminar marcadores');
+        }
+    }
+
+    static async filterMarkersByLabel(userId: string, label: string) {
+        try {
+
+            const markers = await prisma.marker.findMany({
+                where: { 
+                    userId,
+                    label:{
+                        contains: label,
+                        mode: 'insensitive'
+                    }
+                }
+
+            })
+
+            if (!markers) {
+                return [];
+            }
+
+            return markers;
+
+        }catch (error) {
+            console.error('Error al filtrar marcadores por proximidad:', error);
+            throw new Error('Error al filtrar marcadores por proximidad');
         }
     }
 }

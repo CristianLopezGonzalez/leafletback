@@ -22,6 +22,7 @@ export interface Marker {
 export interface MarkerInput {
   latitude: number;
   longitude: number;
+  label: string;
 }
 
 export interface LocationHistory {

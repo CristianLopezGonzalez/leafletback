@@ -58,6 +58,7 @@ model RefreshToken {
 
 model Marker {
   id        String   @id @default(uuid())
+  label     String
   latitude  Float
   longitude Float
   createdAt DateTime @default(now())

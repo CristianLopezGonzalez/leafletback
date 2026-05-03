@@ -4,9 +4,6 @@ import { MarkerService } from '../services/markerService';
 
 const http = new HttpResponse();
 
-const isMarkerArray = (value: unknown): value is Array<{ latitude: number; longitude: number }> => {
-    return Array.isArray(value);
-};
 
 const isIdArray = (value: unknown): value is string[] => {
     return Array.isArray(value);
@@ -52,9 +49,9 @@ export class MarkerController {
                 return http.UNAUTHORIZED(res, 'Usuario no autenticado');
             }
 
-            const markersFromBody = isMarkerArray(req.body) ? req.body : req.body.markers;
+            const markersFromBody = req.body 
 
-            if (isMarkerArray(markersFromBody)) {
+            if (Array.isArray(markersFromBody)) {
                 if (!markersFromBody.length) {
                     return http.BAD_REQUEST(res, 'markers es requerido y debe ser un arreglo no vacío');
                 }
@@ -63,13 +60,13 @@ export class MarkerController {
                 return http.CREATED(res, createdMarkers, 'Marcadores creados exitosamente');
             }
 
-            const { latitude, longitude } = req.body;
+            const { latitude, longitude, label } = req.body;
 
-            if (latitude === undefined || longitude === undefined) {
-                return http.BAD_REQUEST(res, 'latitude y longitude son requeridos');
+            if (latitude === undefined || longitude === undefined || label === undefined) {
+                return http.BAD_REQUEST(res, 'latitude, longitude y label son requeridos');
             }
 
-            const marker = await MarkerService.createMarker(userId, { latitude, longitude });
+            const marker = await MarkerService.createMarker(userId, { latitude, longitude, label });
             return http.CREATED(res, marker, 'Marcador creado exitosamente');
         } catch (error) {
             return next(error);
@@ -131,4 +128,28 @@ export class MarkerController {
             return next(error);
         }
     }
+
+    static async filterMarkersByLabel(req: Request, res: Response, next: NextFunction) { 
+        try { 
+
+            const userId = req.user?.id;
+
+            if (!userId) {
+                return http.UNAUTHORIZED(res, 'Usuario no autenticado');
+            }
+
+            const { label } = req.query;
+
+            if (typeof label !== 'string' || !label.trim()) {
+                return http.BAD_REQUEST(res, 'label es requerido y debe ser una cadena no vacía');
+            }
+
+            const markers = await MarkerService.filterMarkersByLabel(userId, label);
+            return http.OK(res, markers, 'Marcadores filtrados exitosamente');
+
+        }catch (error) {
+            return next(error);
+        }
+    }
+
 }

@@ -8,5 +8,6 @@ router.get('/', authMiddleware, MarkerController.getMyMarkers);
 router.get('/user/:userId', authMiddleware, MarkerController.getUserMarkers);
 router.post('/', authMiddleware, MarkerController.createMarker);
 router.delete('/', authMiddleware, MarkerController.deleteMarker);
+router.get('/filter', authMiddleware, MarkerController.filterMarkersByLabel);
 
 export default router;
